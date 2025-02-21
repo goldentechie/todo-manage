@@ -36,3 +36,74 @@
     transform: rotate(360deg);
   }
 }
+
+.Week {
+  display: flex;
+  width: fit-content;
+  border-right: solid 1px rgb(211, 211, 211);
+}
+.Day {
+  border-left: 1px solid rgb(211, 211, 211);
+  border-bottom: 1px solid rgb(211, 211, 211);
+  min-height: 150px;
+  width: 200px;
+}
+.oddColor {
+  background-color: rgb(255, 246, 235);
+}
+
+.evenColor {
+  background-color: rgb(221, 233, 255);
+}
+
+.Ticket {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.ticketContent {
+  width: 100%;
+  text-align: left; 
+}
+
+.weekNumber {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weekend {
+  color: red;
+}
+
+.activeWeek {
+
+}
+
+.activeDay {
+  background-color: rgb(162, 224, 162);
+}
+
+.newTodoButtonOnDay {
+  width: -webkit-fill-available;
+}
+.ticketControlButtons {
+  display: flex;
+}
+.ticketControlButtons > button {
+  border: none;
+  background-color: unset;
+  cursor: pointer;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.ticketContent > input {
+  width: 90%;
+}
+.strike {
+  text-decoration: line-through;
+}
