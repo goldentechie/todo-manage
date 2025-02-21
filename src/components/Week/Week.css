@@ -1,0 +1,9 @@
+.Week {
+  display: flex;
+  width: fit-content;
+  border-right: solid 1px rgb(211, 211, 211);
+}
+
+.activeWeek {
+  border: solid 1px black;
+}

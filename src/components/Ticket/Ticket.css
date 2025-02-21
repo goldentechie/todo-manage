@@ -1,0 +1,29 @@
+.Ticket {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.ticketContent {
+  width: 100%;
+  text-align: left; 
+}
+.ticketContent > input {
+  width: 90%;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.ticketControlButtons {
+  display: flex;
+}
+.ticketControlButtons > button {
+  border: none;
+  background-color: unset;
+  cursor: pointer;
+}
+
+.hidden {
+  visibility: hidden;
+}

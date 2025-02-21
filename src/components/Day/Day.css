@@ -1,0 +1,38 @@
+.oddColor {
+  background-color: rgba(255, 140, 0, 0.075);
+}
+
+.evenColor {
+  background-color: rgba(0, 89, 255, 0.075);
+}
+
+.Day {
+  border-left: 1px solid rgb(211, 211, 211);
+  border-bottom: 1px solid rgb(211, 211, 211);
+  min-height: 150px;
+  width: 200px;
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 10px
+}
+.weekend {
+  color: red;
+}
+
+
+.activeDay {
+  background-color: rgb(162, 224, 162);
+}
+.tickets {
+  height: 100%;
+}
+
+.newTodoButton {
+  margin-right: 10px;
+  margin-left: 10px;
+  border: solid 1px rgb(109, 109, 109);
+  color: rgb(109, 109, 109);
+  border-radius: 13px;
+}
