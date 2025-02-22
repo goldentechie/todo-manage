@@ -6,6 +6,7 @@ import { getViewWeeksOfYear } from "../../utils";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { useState } from "react";
 import './Calendar.css';
+import { Droppable } from "../../features/dnd/Droppable";
 
 function Calendar() {
   const weeksToShow = 5;
@@ -19,18 +20,24 @@ function Calendar() {
       dispatch(
         dragAndDropTicket({
           targetTodoId: event.active.id as string,
-          toDate: new Date(event.over.id).toISOString(),
+          targetPoolId: event.over.id.toString(),
+          targetPoolType: "day"
         })
       );
   };
   return (
     <div style={{ display: "flex", flexDirection: "row" , justifyContent: "center"}}>
-      <div>
+      <div style={{display:"flex"}}>
         <DndContext onDragEnd={handleDragEnd}>
           <div className="Calendar">
             {weeks.map((week) => (
               <Week week={week} />
             ))}
+          </div>
+          <div style={{minWidth: "100px", minHeight: "100px", border: "solid 1px black"}}>
+            <Droppable id="normal" classNames="">
+              <div></div>
+            </Droppable>
           </div>
         </DndContext>
       </div>

@@ -36,12 +36,16 @@ export interface Todo {
   date: string;
   content: string;
   isDone: boolean;
+  poolId: string;
+  poolType: "week" | "day" | "month" | "normal";
 }
 
 interface NewTodoPayload {
   date: string;
   content: string;
   isDone: boolean;
+  poolId: string;
+  poolType: "week" | "day" | "month" | "normal";
 }
 
 interface UpdatedTodoPayload {
@@ -51,7 +55,8 @@ interface UpdatedTodoPayload {
 
 interface DnDPayload {
   targetTodoId: string;
-  toDate: string;
+  targetPoolId: string;
+  targetPoolType: "week" | "day" | "month" | "normal";
 }
 
 interface CalendarState {
@@ -62,49 +67,7 @@ interface CalendarState {
 export const todoSlice = createSlice({
   name: 'todos',
   initialState: {
-    todos: [
-    {
-      date: '2025-01-01T05:00:00.000Z',
-      content: 'new todo 1',
-      isDone: false,
-      id: '5497f648-cd4c-4642-976f-a8a9149f328b'
-    },
-    {
-      date: '2025-01-01T05:00:00.000Z',
-      content: 'new todo 2',
-      isDone: false,
-      id: '2a58daa9-6a08-4760-8d75-057840f5900b'
-    },
-    {
-      date: '2025-01-01T05:00:00.000Z',
-      content: 'new todo 3',
-      isDone: false,
-      id: 'd2dea708-d91b-4a83-add9-2ffd240af606'
-    },
-    {
-      date: '2025-01-02T05:00:00.000Z',
-      content: 'new todo 4',
-      isDone: false,
-      id: 'e341b4fe-5cea-46d0-856a-f1f1f1d10ad9'
-    },
-    {
-      date: '2025-01-02T05:00:00.000Z',
-      content: 'new todo 5',
-      isDone: false,
-      id: '02497c2d-1865-466d-81c2-bd542b0cba41'
-    },
-    {
-      date: '2025-01-02T05:00:00.000Z',
-      content: 'new todo 6',
-      isDone: false,
-      id: 'e1f88deb-8b70-4038-ae27-a7e3c8952ef1'
-    },
-    {
-      date: '2025-01-02T05:00:00.000Z',
-      content: 'new todo 7',
-      isDone: false,
-      id: '51bcf18b-fcaa-4be3-98ca-a1d2b3ff4164'
-    }],
+    todos: [],
     TodoIdInEdit: null,
   } as CalendarState,
   reducers: {
@@ -155,10 +118,12 @@ export const todoSlice = createSlice({
       state.todos = state.todos.filter(todo=>todo.id !== deleteTodoId);
     },
     dragAndDropTicket: (state, action:PayloadAction<DnDPayload>) => {
-      const {targetTodoId, toDate} = action.payload;
+      const {targetTodoId, targetPoolId, targetPoolType } = action.payload;
       state.todos = [...state.todos.map(todo=>{
         if (todo.id === targetTodoId) {
-          todo.date = toDate;
+          todo.poolId = targetPoolId;
+          todo.poolType = targetPoolType;
+          if (targetPoolType === "day") todo.date = targetPoolId;
         }
         return todo;
       })];
