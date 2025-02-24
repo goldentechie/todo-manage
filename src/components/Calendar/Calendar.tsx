@@ -7,6 +7,7 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { useState } from "react";
 import './Calendar.css';
 import { Droppable } from "../../features/dnd/Droppable";
+import Normal from "../Pool/Pool";
 
 function Calendar() {
   const weeksToShow = 5;
@@ -35,9 +36,6 @@ function Calendar() {
             ))}
           </div>
           <div style={{minWidth: "100px", minHeight: "100px", border: "solid 1px black"}}>
-            <Droppable id="normal" classNames="">
-              <div></div>
-            </Droppable>
           </div>
         </DndContext>
       </div>

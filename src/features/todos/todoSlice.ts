@@ -31,13 +31,15 @@ todos data schema
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { v4 as uuidv4 } from 'uuid';
 
+export type PoolType = "week" | "day" | "month" | "unassigned";
+
 export interface Todo {
   id: string;
   date: string;
   content: string;
   isDone: boolean;
   poolId: string;
-  poolType: "week" | "day" | "month" | "normal";
+  poolType: PoolType;
 }
 
 interface NewTodoPayload {
@@ -45,7 +47,7 @@ interface NewTodoPayload {
   content: string;
   isDone: boolean;
   poolId: string;
-  poolType: "week" | "day" | "month" | "normal";
+  poolType: PoolType;
 }
 
 interface UpdatedTodoPayload {
@@ -56,7 +58,7 @@ interface UpdatedTodoPayload {
 interface DnDPayload {
   targetTodoId: string;
   targetPoolId: string;
-  targetPoolType: "week" | "day" | "month" | "normal";
+  targetPoolType: PoolType;
 }
 
 interface CalendarState {
@@ -64,10 +66,15 @@ interface CalendarState {
   TodoIdInEdit: string | null;
 }
 
+interface TodoCheckPayload {
+  todoDoneId: string;
+  isDone: boolean;
+}
+
 export const todoSlice = createSlice({
   name: 'todos',
   initialState: {
-    todos: [],
+    todos: JSON.parse(window.localStorage.getItem("todos")??"[]") as Todo[],
     TodoIdInEdit: null,
   } as CalendarState,
   reducers: {
@@ -75,32 +82,27 @@ export const todoSlice = createSlice({
       const newTodo: NewTodoPayload = action.payload;
       const newTodoId = uuidv4();
       state.todos = [...state.todos, {...newTodo, id: newTodoId} as Todo];
+      window.localStorage.setItem("todos", JSON.stringify(state.todos));
     },
     removeTodo: (state, action: PayloadAction<string>)=>{
       const removeTodoId = action.payload;
       state.todos = [...state.todos.filter(todo=>todo.id !== removeTodoId)];
+      window.localStorage.setItem("todos", JSON.stringify(state.todos));
     },
-    todoDone: (state, action)=>{
-      const todoDoneId = action.payload;
+    todoDone: (state, action:PayloadAction<TodoCheckPayload>)=>{
+      const { todoDoneId, isDone } = action.payload;
       state.todos = [...state.todos.map(todo=>{
         if (todo.id === todoDoneId) {
-          todo.isDone = true;
+          todo.isDone = isDone;
         }
         return todo;
       })];
+      window.localStorage.setItem("todos", JSON.stringify(state.todos));
     },
     moveToEditStatus: (state, action) => {
       const TodoIdToMoveToEditStatus = action.payload;
       state.TodoIdInEdit = TodoIdToMoveToEditStatus;
-    },
-    todoUndone: (state, action)=>{
-      const todoDoneId = action.payload;
-      state.todos = [...state.todos.map(todo=>{
-        if (todo.id === todoDoneId) {
-          todo.isDone = false;
-        }
-        return todo;
-      })];
+      window.localStorage.setItem("todos", JSON.stringify(state.todos));
     },
     updateTodoContent: (state, action: PayloadAction<UpdatedTodoPayload>)=>{
       const { updateTodoId, newTodoContent} = action.payload;
@@ -112,10 +114,12 @@ export const todoSlice = createSlice({
       })];
 
       state.TodoIdInEdit = null;
+      window.localStorage.setItem("todos", JSON.stringify(state.todos));
     },
     deleteTodo: (state, action) => {
       const deleteTodoId = action.payload;
       state.todos = state.todos.filter(todo=>todo.id !== deleteTodoId);
+      window.localStorage.setItem("todos", JSON.stringify(state.todos));
     },
     dragAndDropTicket: (state, action:PayloadAction<DnDPayload>) => {
       const {targetTodoId, targetPoolId, targetPoolType } = action.payload;
@@ -127,11 +131,12 @@ export const todoSlice = createSlice({
         }
         return todo;
       })];
+      window.localStorage.setItem("todos", JSON.stringify(state.todos));
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { createTodo, removeTodo, todoDone, todoUndone, updateTodoContent,moveToEditStatus, deleteTodo, dragAndDropTicket} = todoSlice.actions
+export const { createTodo, removeTodo, todoDone, updateTodoContent,moveToEditStatus, deleteTodo, dragAndDropTicket} = todoSlice.actions
 
 export default todoSlice.reducer
