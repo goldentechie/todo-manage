@@ -5,7 +5,7 @@ import { dragAndDropTicket } from "../../features/todos/todoSlice";
 import { getViewWeeksOfYear } from "../../utils";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { useState } from "react";
-import './Calendar.css';
+import "./Calendar.css";
 import Unassigned from "../Unassigned/Unassigned";
 
 function Calendar() {
@@ -22,20 +22,35 @@ function Calendar() {
           targetTodoId: event.active.id as string,
           targetPoolId: event.over.id.toString(),
           targetPoolType: event.over.data.current?.type,
-          targetPoolDate: event.over.data.current?.date.toISOString()
+          targetPoolDate: event.over.data.current?.date.toISOString(),
         })
       );
   };
   return (
-    <div style={{ display: "flex", flexDirection: "row" , justifyContent: "center"}}>
-      <div style={{display:"flex"}}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+      }}
+    >
+      <div style={{ display: "flex" }}>
         <DndContext onDragEnd={handleDragEnd}>
           <div className="Calendar">
+            <div className="calendarDaysHeadbar">
+              {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT", "Week"].map(
+                (header) => (
+                  <div className={"calendarDayHeader"+((header==="SUN" || header === "SAT")?" weekend":"")}>
+                    <h2>{header}</h2>
+                  </div>
+                )
+              )}
+            </div>
             {weeks.map((week) => (
               <Week week={week} />
             ))}
           </div>
-          <div style={{minWidth: "100px", minHeight: "100px"}}>
+          <div style={{ minWidth: "100px", minHeight: "100px" }}>
             <Unassigned />
           </div>
         </DndContext>

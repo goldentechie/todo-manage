@@ -1,0 +1,9 @@
+.calendarDaysHeadbar {
+  display: flex;
+}
+.calendarDayHeader {
+  width: 200px;
+  border: solid 1px;
+  border-radius: 5px;
+  margin: 2px;
+}

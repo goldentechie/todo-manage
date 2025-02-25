@@ -45,7 +45,7 @@ function Pool({classNames, id, type, date} : PoolComponentProps) {
   }
   return (
     <Droppable id={id} classNames={classNames+" Pool"} data={{type, id, date}}>
-      <div>{title}</div>
+      <div className="poolTitle">{title}</div>
       <div className="tickets">
         {todos.map((todo) => (<Ticket data={todo} />))}
       </div>

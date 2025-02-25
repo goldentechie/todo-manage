@@ -12,7 +12,7 @@ function Week({week}:WeekComponentProps) {
   return (
     <div className={"Week"+(isThisWeek(week)?" activeWeek":"")}>
       {week.map(date=><Day date={date}/>)}
-      <Pool classNames="" id={id} type="week" date={week[6]}/>
+      <Pool classNames="weekPool" id={id} type="week" date={week[6]}/>
     </div>
   );
 }
