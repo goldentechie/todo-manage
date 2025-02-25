@@ -21,7 +21,8 @@ function Calendar() {
         dragAndDropTicket({
           targetTodoId: event.active.id as string,
           targetPoolId: event.over.id.toString(),
-          targetPoolType: event.over.data.current?.type
+          targetPoolType: event.over.data.current?.type,
+          targetPoolDate: event.over.data.current?.date.toISOString()
         })
       );
   };
@@ -34,7 +35,7 @@ function Calendar() {
               <Week week={week} />
             ))}
           </div>
-          <div style={{minWidth: "100px", minHeight: "100px", border: "solid 1px black"}}>
+          <div style={{minWidth: "100px", minHeight: "100px"}}>
             <Unassigned />
           </div>
         </DndContext>

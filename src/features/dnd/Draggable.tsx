@@ -6,12 +6,13 @@ interface DraggableComponentProps {
   id: string;
   poolId: string;
   poolType: string;
+  poolDate: Date;
 }
 
-export function Draggable({children, id, poolId, poolType}:DraggableComponentProps) {
+export function Draggable({children, id, poolId, poolType, poolDate}:DraggableComponentProps) {
   const {attributes, listeners, setNodeRef, transform} = useDraggable({
     id: id,
-    data: { poolId, poolType }
+    data: { poolId, poolType, poolDate }
   });
   const style = transform ? {transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,} : undefined;
 

@@ -35,15 +35,16 @@ export type PoolType = "week" | "day" | "month" | "unassigned";
 
 export interface Todo {
   id: string;
-  date: string;
+  date: Date;
   content: string;
   isDone: boolean;
   poolId: string;
   poolType: PoolType;
+  isScheduled: boolean;
 }
 
 interface NewTodoPayload {
-  date: string;
+  date: Date;
   content: string;
   isDone: boolean;
   poolId: string;
@@ -59,6 +60,7 @@ interface DnDPayload {
   targetTodoId: string;
   targetPoolId: string;
   targetPoolType: PoolType;
+  targetPoolDate: Date;
 }
 
 interface CalendarState {
@@ -69,6 +71,10 @@ interface CalendarState {
 interface TodoCheckPayload {
   todoDoneId: string;
   isDone: boolean;
+}
+interface TodoScheduledPayload {
+  todoScheduledId: string;
+  isScheduled: boolean;
 }
 
 export const todoSlice = createSlice({
@@ -99,6 +105,16 @@ export const todoSlice = createSlice({
       })];
       window.localStorage.setItem("todos", JSON.stringify(state.todos));
     },
+    todoScheduled: (state, action:PayloadAction<TodoScheduledPayload>)=>{
+      const { todoScheduledId, isScheduled } = action.payload;
+      state.todos = [...state.todos.map(todo=>{
+        if (todo.id === todoScheduledId) {
+          todo.isScheduled = isScheduled;
+        }
+        return todo;
+      })];
+      window.localStorage.setItem("todos", JSON.stringify(state.todos));
+    },
     moveToEditStatus: (state, action) => {
       const TodoIdToMoveToEditStatus = action.payload;
       state.TodoIdInEdit = TodoIdToMoveToEditStatus;
@@ -122,12 +138,12 @@ export const todoSlice = createSlice({
       window.localStorage.setItem("todos", JSON.stringify(state.todos));
     },
     dragAndDropTicket: (state, action:PayloadAction<DnDPayload>) => {
-      const {targetTodoId, targetPoolId, targetPoolType } = action.payload;
+      const {targetTodoId, targetPoolId, targetPoolType, targetPoolDate } = action.payload;
       state.todos = [...state.todos.map(todo=>{
         if (todo.id === targetTodoId) {
           todo.poolId = targetPoolId;
           todo.poolType = targetPoolType;
-          if (targetPoolType === "day") todo.date = targetPoolId;
+          todo.date = targetPoolDate;
         }
         return todo;
       })];
@@ -137,6 +153,6 @@ export const todoSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { createTodo, removeTodo, todoDone, updateTodoContent,moveToEditStatus, deleteTodo, dragAndDropTicket} = todoSlice.actions
+export const { createTodo, removeTodo, todoDone, todoScheduled, updateTodoContent,moveToEditStatus, deleteTodo, dragAndDropTicket} = todoSlice.actions
 
 export default todoSlice.reducer

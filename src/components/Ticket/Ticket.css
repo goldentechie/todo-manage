@@ -27,3 +27,11 @@
 .hidden {
   visibility: hidden;
 }
+
+.scheduledCheckbox {
+  accent-color: yellow;
+}
+
+.doneCheckbox {
+  accent-color: green;
+}

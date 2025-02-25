@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaPen, FaSave, FaTrash } from "react-icons/fa";
-import { deleteTodo, moveToEditStatus, Todo, todoDone, updateTodoContent } from "../../features/todos/todoSlice";
+import { deleteTodo, moveToEditStatus, Todo, todoDone, todoScheduled, updateTodoContent } from "../../features/todos/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { Draggable } from "../../features/dnd/Draggable";
@@ -33,10 +33,14 @@ function Ticket({data}: TicketComponentProps) {
   const Done = (isDone: boolean) => {
     dispatch(todoDone({todoDoneId: data.id, isDone}))
   }
+  const Schedule = (isScheduled: boolean) => {
+    dispatch(todoScheduled({todoScheduledId: data.id, isScheduled}))
+  }
   return (
-    <Draggable id={data.id} poolId={data.poolId} poolType={data.poolType}>
+    <Draggable id={data.id} poolId={data.poolId} poolType={data.poolType} poolDate={data.date}>
       <div className="Ticket" onMouseEnter={()=>setShowControls(true)} onMouseLeave={()=>setShowControls(false)}>
-        <span><input type="checkbox" checked={data.isDone} onChange={e=>Done(e.target.checked)}/></span>
+        <span><input className="doneCheckbox" type="checkbox" checked={data.isDone} onChange={e=>Done(e.target.checked)}/></span>
+        <span><input className={"scheduledCheckbox"+(data.isDone?" hidden":"")} type="checkbox" checked={data.isScheduled} onChange={e=>Schedule(e.target.checked)}/></span>
         <div className={"ticketContent"+(data.isDone?" strike":"")}>
           {isEdit?
             <input 

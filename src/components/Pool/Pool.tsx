@@ -5,6 +5,7 @@ import Ticket from "../Ticket/Ticket";
 import { useState } from "react";
 import { createTodo, PoolType } from "../../features/todos/todoSlice";
 import { isSameDay, isSameWeek } from "../../utils";
+import './Pool.css';
 
 interface PoolComponentProps {
   classNames: string;
@@ -26,24 +27,24 @@ function Pool({classNames, id, type, date} : PoolComponentProps) {
   const [isInputActive, SetInputActive] = useState(false);
   const activateInput = () => {SetInputActive(true);setNewTodoContent("")};
   const disableInput = () => SetInputActive(false);
-  let title = "Unassigned";
+  let title = "";
   switch (type) {
     case "day": title = date.getMonth() + 1 + "/" + date.getDate(); break;
     case "month":title = (new Date(id)).getMonth().toString(); break;
-    case "week":
-    break;
+    case "unassigned": title = "Unassigned"; break;
+    case "week": title = "Week"; break;
   }
 
   const handleESCAndEnter = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape'){ disableInput(); setNewTodoContent(""); }
     if (event.key === 'Enter') {
-      if (newTodoContent.trim().length > 0) dispatch(createTodo({content: newTodoContent.trim(),isDone: false, poolId:id, poolType: type, date: date.toISOString()}))
+      if (newTodoContent.trim().length > 0) dispatch(createTodo({content: newTodoContent.trim(),isDone: false, poolId:id, poolType: type, date}))
       else disableInput();
       setNewTodoContent("");
     }
   }
   return (
-    <Droppable id={id} classNames={classNames} data={{type, id}}>
+    <Droppable id={id} classNames={classNames+" Pool"} data={{type, id, date}}>
       <div>{title}</div>
       <div className="tickets">
         {todos.map((todo) => (<Ticket data={todo} />))}
