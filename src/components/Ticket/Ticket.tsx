@@ -34,7 +34,7 @@ function Ticket({data}: TicketComponentProps) {
     dispatch(todoDone({todoDoneId: data.id, isDone}))
   }
   return (
-    <Draggable id={data.id}>
+    <Draggable id={data.id} poolId={data.poolId} poolType={data.poolType}>
       <div className="Ticket" onMouseEnter={()=>setShowControls(true)} onMouseLeave={()=>setShowControls(false)}>
         <span><input type="checkbox" checked={data.isDone} onChange={e=>Done(e.target.checked)}/></span>
         <div className={"ticketContent"+(data.isDone?" strike":"")}>

@@ -4,11 +4,14 @@ import {useDraggable} from '@dnd-kit/core';
 interface DraggableComponentProps {
   children: ReactNode;
   id: string;
+  poolId: string;
+  poolType: string;
 }
 
-export function Draggable(props:DraggableComponentProps) {
+export function Draggable({children, id, poolId, poolType}:DraggableComponentProps) {
   const {attributes, listeners, setNodeRef, transform} = useDraggable({
-    id: props.id,
+    id: id,
+    data: { poolId, poolType }
   });
   const style = transform ? {transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,} : undefined;
 
@@ -18,7 +21,7 @@ export function Draggable(props:DraggableComponentProps) {
   }
   return (
     <div ref={setNodeRef} style={style} {...attributes} onPointerDown={handlePointerDown}>
-      {props.children}
+      {children}
     </div>
   );
 }

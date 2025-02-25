@@ -50,6 +50,27 @@ export const isSameDay = (date1: Date, date2: Date) => {
   return true;
 };
 
+const getDateWeek = (date:Date)=>{
+  const currentDate = 
+      (typeof date === 'object') ? date : new Date();
+  const januaryFirst = 
+      new Date(currentDate.getFullYear(), 0, 1);
+  const daysToNextMonday = 
+      (januaryFirst.getDay() === 1) ? 0 : 
+      (7 - januaryFirst.getDay()) % 7;
+  const nextMonday = 
+      new Date(currentDate.getFullYear(), 0, 
+      januaryFirst.getDate() + daysToNextMonday);
+
+  return (currentDate < nextMonday) ? 52 : 
+  (currentDate > nextMonday ? Math.ceil(
+  (currentDate.getTime() - nextMonday.getTime()) / (24 * 3600 * 1000) / 7) : 1);
+}
+
+export const isSameWeek = (date1: Date, date2: Date) => {
+  return getDateWeek(date1) === getDateWeek(date2);
+};
+
 export const isThisWeek = (week: Date[]): boolean => {
   if (!week.length) return false;
 

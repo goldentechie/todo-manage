@@ -1,11 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import Ticket from "../Ticket/Ticket";
-import { createTodo } from "../../features/todos/todoSlice";
-import { RootState } from "../../app/store";
-import { isSameDay, isToday, isWeekend } from "../../utils";
-import { useState } from "react";
+import { isToday, isWeekend } from "../../utils";
 import './Day.css';
-import { Droppable } from "../../features/dnd/Droppable";
 import Pool from "../Pool/Pool";
 
 type DayComponentProps = {
@@ -18,7 +12,7 @@ function Day({ date }: DayComponentProps) {
   if (isToday(date)) className += " activeDay";
 
   return (
-    <Pool classNames={className} id={date.toDateString()}/>
+    <Pool classNames={className} id={date.toDateString()} type="day" date={date}/>
   );
 }
 

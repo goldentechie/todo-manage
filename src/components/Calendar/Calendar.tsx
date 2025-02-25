@@ -6,8 +6,7 @@ import { getViewWeeksOfYear } from "../../utils";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { useState } from "react";
 import './Calendar.css';
-import { Droppable } from "../../features/dnd/Droppable";
-import Normal from "../Pool/Pool";
+import Unassigned from "../Unassigned/Unassigned";
 
 function Calendar() {
   const weeksToShow = 5;
@@ -22,7 +21,7 @@ function Calendar() {
         dragAndDropTicket({
           targetTodoId: event.active.id as string,
           targetPoolId: event.over.id.toString(),
-          targetPoolType: "day"
+          targetPoolType: event.over.data.current?.type
         })
       );
   };
@@ -36,6 +35,7 @@ function Calendar() {
             ))}
           </div>
           <div style={{minWidth: "100px", minHeight: "100px", border: "solid 1px black"}}>
+            <Unassigned />
           </div>
         </DndContext>
       </div>

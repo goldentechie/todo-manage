@@ -4,6 +4,7 @@ import { RootState } from "../../app/store";
 import Ticket from "../Ticket/Ticket";
 import { useState } from "react";
 import { createTodo, PoolType } from "../../features/todos/todoSlice";
+import { isSameDay, isSameWeek } from "../../utils";
 
 interface PoolComponentProps {
   classNames: string;
@@ -15,7 +16,12 @@ interface PoolComponentProps {
 function Pool({classNames, id, type, date} : PoolComponentProps) {
   // droppable
   const dispatch = useDispatch();
-  const todos = useSelector((state: RootState) => state.calendar.todos.filter((todo) => todo.poolType === "day" && isSameDay(new Date(todo.date), date)));
+  const todos = useSelector((state: RootState) => state.calendar.todos.filter((todo) => {
+    if (todo.poolType !== type) return false;
+    if (todo.poolType === "day" && !isSameDay(new Date(todo.date), date)) return false;
+    if (todo.poolType === "week" && !isSameWeek(new Date(todo.date), date)) return false;
+    return true;
+  }));
   const [newTodoContent, setNewTodoContent] = useState("");
   const [isInputActive, SetInputActive] = useState(false);
   const activateInput = () => {SetInputActive(true);setNewTodoContent("")};
@@ -23,7 +29,7 @@ function Pool({classNames, id, type, date} : PoolComponentProps) {
   let title = "Unassigned";
   switch (type) {
     case "day": title = date.getMonth() + 1 + "/" + date.getDate(); break;
-    case "month":title = (new Date(id)).getMonth() break;
+    case "month":title = (new Date(id)).getMonth().toString(); break;
     case "week":
     break;
   }
@@ -31,13 +37,13 @@ function Pool({classNames, id, type, date} : PoolComponentProps) {
   const handleESCAndEnter = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape'){ disableInput(); setNewTodoContent(""); }
     if (event.key === 'Enter') {
-      if (newTodoContent.trim().length > 0) dispatch(createTodo({content: newTodoContent.trim(),isDone: false, poolId:id, poolType: "day"}))
+      if (newTodoContent.trim().length > 0) dispatch(createTodo({content: newTodoContent.trim(),isDone: false, poolId:id, poolType: type, date: date.toISOString()}))
       else disableInput();
       setNewTodoContent("");
     }
   }
   return (
-    <Droppable id={id} classNames={classNames}>
+    <Droppable id={id} classNames={classNames} data={{type, id}}>
       <div>{title}</div>
       <div className="tickets">
         {todos.map((todo) => (<Ticket data={todo} />))}
